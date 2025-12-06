@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海月坊 - 美食宣传海报</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #2196F3;
+            --primary-green: #4CAF50;
+            --dark-blue: #1976D2;
+            --dark-green: #388E3C;
+            --light-blue: #E3F2FD;
+            --light-green: #E8F5E9;
+            --accent-yellow: #FFC107;
+            --text-dark: #212121;
+            --text-gray: #757575;
+            --white: #FFFFFF;
+            --poster-width: 400px;
+            --poster-height: 800px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e3f2fd 0%, #e8f5e9 100%);
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            padding: 40px 20px;
+            gap: 30px;
+        }
+
+        .poster-container {
+            position: relative;
+            width: var(--poster-width);
+            height: var(--poster-height);
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        /* Background geometric shapes */
+        .bg-shape {
+            position: absolute;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .bg-shape-1 {
+            width: 200px;
+            height: 200px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            top: -50px;
+            right: -50px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .bg-shape-2 {
+            width: 150px;
+            height: 150px;
+            background: var(--primary-green);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            bottom: 100px;
+            left: -30px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        .bg-shape-3 {
+            width: 120px;
+            height: 120px;
+            background: var(--primary-blue);
+            transform: rotate(45deg);
+            top: 300px;
+            right: -20px;
+            animation: float 7s ease-in-out infinite;
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: absolute;
+            z-index: 1;
+        }
+
+        .floating-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            animation: float-dot 4s ease-in-out infinite;
+        }
+
+        .floating-dot:nth-child(1) {
+            top: 120px;
+            left: 50px;
+            animation-delay: 0s;
+        }
+
+        .floating-dot:nth-child(2) {
+            top: 200px;
+            right: 60px;
+            background: var(--primary-green);
+            animation-delay: 1s;
+        }
+
+        .floating-dot:nth-child(3) {
+            top: 450px;
+            left: 80px;
+            animation-delay: 2s;
+        }
+
+        .floating-dot:nth-child(4) {
+            bottom: 200px;
+            right: 40px;
+            animation-delay: 1.5s;
+        }
+
+        .star {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 10px solid var(--accent-yellow);
+            position: relative;
+            transform: rotate(35deg);
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .star::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 10px solid var(--accent-yellow);
+            transform: rotate(-70deg);
+            top: -3px;
+            left: -6px;
+        }
+
+        .star:nth-child(5) {
+            top: 180px;
+            right: 80px;
+            animation-delay: 0.5s;
+        }
+
+        .star:nth-child(6) {
+            top: 500px;
+            left: 70px;
+            animation-delay: 1.2s;
+        }
+
+        .diagonal-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-green), transparent);
+            transform: rotate(45deg);
+            opacity: 0.3;
+            animation: slide 5s ease-in-out infinite;
+        }
+
+        .diagonal-line:nth-child(7) {
+            top: 250px;
+            left: 30px;
+        }
+
+        .diagonal-line:nth-child(8) {
+            top: 600px;
+            right: 50px;
+            background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes float-dot {
+            0%, 100% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(-15px); opacity: 1; }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; transform: rotate(35deg) scale(1); }
+            50% { opacity: 1; transform: rotate(35deg) scale(1.2); }
+        }
+
+        @keyframes slide {
+            0%, 100% { transform: rotate(45deg) translateX(0); opacity: 0.3; }
+            50% { transform: rotate(45deg) translateX(10px); opacity: 0.6; }
+        }
+
+        /* Content area */
+        .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 30px;
+        }
+
+        /* Header section */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .brand-name {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .brand-name::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary-blue), var(--primary-green), transparent);
+            border-radius: 2px;
+        }
+
+        .brand-name::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 20%;
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-green), transparent);
+            border-radius: 1px;
+            opacity: 0.6;
+        }
+
+        .brand-english {
+            font-size: 11px;
+            color: var(--text-gray);
+            letter-spacing: 3px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* Dishes section */
+        .dishes-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .dish-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-green) 100%);
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 
+                0 4px 15px rgba(33, 150, 243, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .dish-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(33, 150, 243, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .dish-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            flex-shrink: 0;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.1),
+                inset 0 2px 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .dish-icon.rice {
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+        }
+
+        .dish-icon.seafood {
+            background: linear-gradient(135deg, #E1F5FE 0%, #B3E5FC 100%);
+        }
+
+        .dish-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dish-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dish-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .new-badge {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+            color: var(--white);
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        }
+
+        .dish-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+        }
+
+        .price-symbol {
+            font-size: 16px;
+        }
+
+        /* Contact section */
+        .contact-section {
+            padding-top: 20px;
+            border-top: 1px dashed rgba(33, 150, 243, 0.2);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .contact-dot.phone {
+            background: var(--primary-blue);
+        }
+
+        .contact-dot.address {
+            background: var(--primary-green);
+        }
+
+        .contact-text {
+            flex: 1;
+        }
+
+        /* Export button */
+        .export-btn {
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-green) 100%);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.35);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .export-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(33, 150, 243, 0.45);
+        }
+
+        .export-btn:hover::before {
+            left: 100%;
+        }
+
+        .export-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .export-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Preview section */
+        .preview-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .preview-section.show {
+            display: flex;
+        }
+
+        .preview-title {
+            font-size: 18px;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .preview-image {
+            max-width: var(--poster-width);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .download-btn {
+            padding: 12px 30px;
+            font-size: 14px;
+            color: var(--primary-blue);
+            background: var(--white);
+            border: 2px solid var(--primary-blue);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            :root {
+                --poster-width: 90vw;
+                --poster-height: calc(90vw * 2);
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .brand-name {
+                font-size: 36px;
+            }
+
+            .dish-card {
+                padding: 15px;
+            }
+
+            .dish-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 35px;
+            }
+
+            .dish-name {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="poster-container" id="poster">
+        <!-- Background geometric shapes -->
+        <div class="bg-shape bg-shape-1"></div>
+        <div class="bg-shape bg-shape-2"></div>
+        <div class="bg-shape bg-shape-3"></div>
+
+        <!-- Decorative elements -->
+        <div class="decoration floating-dot"></div>
+        <div class="decoration floating-dot"></div>
+        <div class="decoration floating-dot"></div>
+        <div class="decoration floating-dot"></div>
+        <div class="decoration star"></div>
+        <div class="decoration star"></div>
+        <div class="decoration diagonal-line"></div>
+        <div class="decoration diagonal-line"></div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Header -->
+            <div class="header">
+                <h1 class="brand-name">海月坊</h1>
+                <p class="brand-english">HAIYUE FANG TEKAN</p>
+            </div>
+
+            <!-- Dishes section -->
+            <div class="dishes-section">
+                <!-- Dish 1 -->
+                <div class="dish-card">
+                    <div class="dish-icon rice">🍚</div>
+                    <div class="dish-info">
+                        <div class="dish-name-row">
+                            <span class="dish-name">五常大米饭</span>
+                            <span class="new-badge">新品</span>
+                        </div>
+                        <div class="dish-price">
+                            <span class="price-symbol">¥</span>
+                            <span>1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dish 2 -->
+                <div class="dish-card">
+                    <div class="dish-icon seafood">🦐</div>
+                    <div class="dish-info">
+                        <div class="dish-name-row">
+                            <span class="dish-name">虾蟹海鲜套餐</span>
+                            <span class="new-badge">新品</span>
+                        </div>
+                        <div class="dish-price">
+                            <span class="price-symbol">¥</span>
+                            <span>188</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact section -->
+            <div class="contact-section">
+                <div class="contact-item">
+                    <div class="contact-dot phone"></div>
+                    <span class="contact-text">0755-88888***</span>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-dot address"></div>
+                    <span class="contact-text">广东省深圳市福田区融科技大厦</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="export-btn" onclick="exportPoster()">导出为图片</button>
+
+    <div class="preview-section" id="previewSection">
+        <p class="preview-title">✨ 导出预览</p>
+        <img class="preview-image" id="previewImage" alt="海报预览">
+        <button class="download-btn" onclick="downloadImage()">下载图片</button>
+    </div>
+
+    <script>
+        let exportedImageData = null;
+
+        async function exportPoster() {
+            const poster = document.getElementById('poster');
+            const btn = document.querySelector('.export-btn');
+            
+            btn.textContent = '导出中...';
+            btn.disabled = true;
+            
+            try {
+                const canvas = await html2canvas(poster, {
+                    scale: 2,
+                    backgroundColor: '#FFFFFF',
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: true,
+                    width: 400,
+                    height: 800
+                });
+                
+                exportedImageData = canvas.toDataURL('image/png');
+                
+                const previewSection = document.getElementById('previewSection');
+                const previewImage = document.getElementById('previewImage');
+                
+                previewImage.src = exportedImageData;
+                previewSection.classList.add('show');
+                
+                // Scroll to preview
+                previewSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+            } catch (error) {
+                console.error('Export failed:', error);
+                alert('导出失败，请重试');
+            } finally {
+                btn.textContent = '导出为图片';
+                btn.disabled = false;
+            }
+        }
+
+        function downloadImage() {
+            if (!exportedImageData) return;
+            
+            const link = document.createElement('a');
+            link.download = '海月坊_美食海报.png';
+            link.href = exportedImageData;
+            link.click();
+        }
+    </script>
+</body>
+</html>
+

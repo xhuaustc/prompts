@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美味餐厅招牌</title>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+            font-family: 'Noto Sans SC', sans-serif;
+            padding: 40px 20px;
+            gap: 30px;
+        }
+
+        /* Main Signboard Container */
+        .signboard {
+            width: 1000px;
+            height: 400px;
+            background: linear-gradient(135deg, #c8e6c9 0%, #8bc34a 50%, #4CAF50 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 60px rgba(76, 175, 80, 0.4),
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* Background Text */
+        .bg-text {
+            position: absolute;
+            font-size: 180px;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.08);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            letter-spacing: 20px;
+            white-space: nowrap;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* Mountain Silhouette */
+        .mountains {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+        }
+
+        .mountain {
+            position: absolute;
+            bottom: 0;
+            background: rgba(46, 125, 50, 0.15);
+        }
+
+        .mountain-1 {
+            left: -50px;
+            width: 300px;
+            height: 100px;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+        }
+
+        .mountain-2 {
+            left: 150px;
+            width: 400px;
+            height: 120px;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            background: rgba(46, 125, 50, 0.12);
+        }
+
+        .mountain-3 {
+            right: 100px;
+            width: 350px;
+            height: 90px;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            background: rgba(46, 125, 50, 0.1);
+        }
+
+        /* Fog Effect */
+        .fog {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.3), transparent);
+            pointer-events: none;
+        }
+
+        /* Bird Silhouettes */
+        .bird {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 20px;
+            animation: fly 8s ease-in-out infinite;
+        }
+
+        .bird-1 { top: 30px; left: 80px; animation-delay: 0s; }
+        .bird-2 { top: 50px; left: 120px; font-size: 16px; animation-delay: 0.5s; }
+        .bird-3 { top: 60px; right: 200px; animation-delay: 1s; }
+
+        @keyframes fly {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-5px) translateX(10px); }
+            50% { transform: translateY(-10px) translateX(5px); }
+            75% { transform: translateY(-5px) translateX(-5px); }
+        }
+
+        /* Leaf Decorations */
+        .leaf {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.5;
+            animation: sway 4s ease-in-out infinite;
+        }
+
+        .leaf-1 { top: 20px; right: 50px; animation-delay: 0s; }
+        .leaf-2 { bottom: 130px; left: 30px; font-size: 20px; animation-delay: 1s; }
+        .leaf-3 { top: 80px; left: 60px; font-size: 18px; animation-delay: 2s; }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* Corner Light Spots */
+        .light-spot {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .light-spot-1 {
+            top: -30px;
+            left: -30px;
+            width: 150px;
+            height: 150px;
+        }
+
+        .light-spot-2 {
+            bottom: -40px;
+            right: -40px;
+            width: 200px;
+            height: 200px;
+            opacity: 0.6;
+        }
+
+        .light-spot-3 {
+            top: 50px;
+            right: 300px;
+            width: 80px;
+            height: 80px;
+            opacity: 0.4;
+        }
+
+        /* Main Content Area */
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            height: 100%;
+            padding: 30px 50px;
+        }
+
+        /* Left Section - Title */
+        .title-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Main Title - Characters in Circles */
+        .main-title {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .char-circle {
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            font-weight: 900;
+            color: #2E7D32;
+            position: relative;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.15),
+                inset 0 -3px 10px rgba(0, 0, 0, 0.05);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .char-circle::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            width: 25px;
+            height: 15px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), transparent);
+            border-radius: 50%;
+            transform: rotate(-30deg);
+        }
+
+        .char-circle:nth-child(1) { animation-delay: 0s; }
+        .char-circle:nth-child(2) { animation-delay: 0.2s; }
+        .char-circle:nth-child(3) { animation-delay: 0.4s; }
+        .char-circle:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Subtitle */
+        .subtitle-area {
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            color: white;
+            font-size: 22px;
+            font-weight: 400;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            letter-spacing: 8px;
+            margin-bottom: 15px;
+        }
+
+        .divider {
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8), transparent);
+            position: relative;
+        }
+
+        .divider::before {
+            content: '✦';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            background: linear-gradient(135deg, #8bc34a, #4CAF50);
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        /* Right Section - Food Icons */
+        .food-section {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+            align-items: flex-end;
+        }
+
+        .food-icon-wrapper {
+            position: relative;
+            animation: swing 4s ease-in-out infinite;
+        }
+
+        .food-icon-wrapper:nth-child(1) {
+            margin-right: 80px;
+            animation-delay: 0s;
+        }
+
+        .food-icon-wrapper:nth-child(2) {
+            margin-right: 20px;
+            animation-delay: 0.5s;
+        }
+
+        .food-icon-wrapper:nth-child(3) {
+            margin-right: 60px;
+            animation-delay: 1s;
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .food-icon {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .food-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Dashed Circle Animation */
+        .dashed-ring {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            width: 86px;
+            height: 86px;
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Food Label on Hover */
+        .food-label {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #66bb6a, #43a047);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .food-icon-wrapper:hover .food-label {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        /* Export Button */
+        .export-btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #66bb6a 0%, #43a047 50%, #388e3c 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(76, 175, 80, 0.5);
+        }
+
+        .export-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: left 0.5s ease;
+        }
+
+        .export-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Preview Area */
+        .preview-area {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .preview-area.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .preview-title {
+            color: #2E7D32;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .preview-image {
+            max-width: 800px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: #2E7D32;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .download-link:hover {
+            background: #1b5e20;
+        }
+    </style>
+</head>
+<body>
+    <div class="signboard" id="signboard">
+        <!-- Background Text -->
+        <div class="bg-text">RESTAURANT</div>
+        
+        <!-- Mountains -->
+        <div class="mountains">
+            <div class="mountain mountain-1"></div>
+            <div class="mountain mountain-2"></div>
+            <div class="mountain mountain-3"></div>
+        </div>
+        
+        <!-- Fog -->
+        <div class="fog"></div>
+        
+        <!-- Birds -->
+        <div class="bird bird-1">🕊️</div>
+        <div class="bird bird-2">🕊️</div>
+        <div class="bird bird-3">🕊️</div>
+        
+        <!-- Leaves -->
+        <div class="leaf leaf-1">🍃</div>
+        <div class="leaf leaf-2">🌿</div>
+        <div class="leaf leaf-3">🍀</div>
+        
+        <!-- Light Spots -->
+        <div class="light-spot light-spot-1"></div>
+        <div class="light-spot light-spot-2"></div>
+        <div class="light-spot light-spot-3"></div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Left - Title Section -->
+            <div class="title-section">
+                <div class="main-title">
+                    <div class="char-circle">美</div>
+                    <div class="char-circle">味</div>
+                    <div class="char-circle">餐</div>
+                    <div class="char-circle">厅</div>
+                </div>
+                <div class="subtitle-area">
+                    <div class="subtitle">正宗美味 · 自然新鲜</div>
+                    <div class="divider"></div>
+                </div>
+            </div>
+            
+            <!-- Right - Food Icons -->
+            <div class="food-section">
+                <div class="food-icon-wrapper">
+                    <div class="dashed-ring"></div>
+                    <div class="food-icon">🍔</div>
+                    <div class="food-label">美味汉堡</div>
+                </div>
+                <div class="food-icon-wrapper">
+                    <div class="dashed-ring"></div>
+                    <div class="food-icon">🍕</div>
+                    <div class="food-label">经典比萨</div>
+                </div>
+                <div class="food-icon-wrapper">
+                    <div class="dashed-ring"></div>
+                    <div class="food-icon">🍰</div>
+                    <div class="food-label">精致蛋糕</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="export-btn" onclick="exportImage()">📷 导出为图片</button>
+
+    <div class="preview-area" id="previewArea">
+        <h3 class="preview-title">✨ 图片预览</h3>
+        <img class="preview-image" id="previewImage" src="" alt="招牌预览">
+        <br>
+        <a class="download-link" id="downloadLink" href="" download="restaurant-signboard.png">💾 下载图片</a>
+    </div>
+
+    <script>
+        function exportImage() {
+            const signboard = document.getElementById('signboard');
+            const btn = document.querySelector('.export-btn');
+            
+            // Show loading state
+            btn.textContent = '⏳ 正在生成...';
+            btn.disabled = true;
+            
+            html2canvas(signboard, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                
+                // Show preview
+                const previewArea = document.getElementById('previewArea');
+                const previewImage = document.getElementById('previewImage');
+                const downloadLink = document.getElementById('downloadLink');
+                
+                previewImage.src = imgData;
+                downloadLink.href = imgData;
+                previewArea.classList.add('show');
+                
+                // Reset button
+                btn.textContent = '📷 导出为图片';
+                btn.disabled = false;
+                
+                // Scroll to preview
+                previewArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }).catch(err => {
+                console.error('Export failed:', err);
+                btn.textContent = '📷 导出为图片';
+                btn.disabled = false;
+                alert('导出失败，请重试');
+            });
+        }
+    </script>
+</body>
+</html>
+
