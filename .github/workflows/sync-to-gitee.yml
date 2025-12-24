@@ -1,0 +1,38 @@
+name: Sync to Gitee
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.GITEE_SSH_PRIVATE_KEY }}
+
+      - name: Add Gitee to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H gitee.com >> ~/.ssh/known_hosts
+
+      - name: Verify SSH connectivity to Gitee
+        run: |
+          ssh -o BatchMode=yes -T git@gitee.com || true
+
+      - name: Push mirror to Gitee
+        run: |
+          git remote remove gitee || true
+          git remote add gitee "git@gitee.com:xhua/prompts.git"
+          git push --mirror gitee
