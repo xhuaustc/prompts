@@ -39,6 +39,13 @@
 - 市场分析
 - 商业计划
 
+### 💻 [software-engineering](./software-engineering) - 软件工程
+- 需求分析与架构设计
+- 代码开发与重构
+- 测试与质量保障
+- 文档、Git 与 DevOps
+- 技术选型决策
+
 ### 🌱 [personal-dev](./personal-dev) - 个人发展
 - 职业规划
 - 目标设定
